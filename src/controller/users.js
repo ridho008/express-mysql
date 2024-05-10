@@ -12,9 +12,14 @@ const getAllUser = async (req, res) => {
 const createNewUser = async (req, res) => {
   console.log(req.body);
   const { body } = req;
+
+  if (!body.name || !body.email || !body.address) {
+    return res.status(400).json({ message: "you sent wrong data", data: null }); // bila request body tidak sesuai
+  }
+
   try {
     await userModel.createNewUser(body);
-    res.json({ message: "create new users success", data: body });
+    res.status(201).json({ message: "create new users success", data: body });
   } catch (error) {
     res.status(500).json({ message: "Server error", serverMessage: error });
   }
